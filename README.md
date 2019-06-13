@@ -1,5 +1,6 @@
-# minerl
+# MineRL Competition
 [The MineRL Competition!](http://minerl.io/competition/)
+
 [Competition Rules](https://gitlab.aicrowd.com/minerl/minerl-resources/blob/master/Rules.md)
 # Development Environment
 Landon has been using a Windows VDI to get into the lab environment and then SSHing into a GPU server where he runs code on a docker container.
