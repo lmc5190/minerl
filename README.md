@@ -29,7 +29,7 @@ landonchambers/minerl`
 - port 800 on the docker container will talk to port 4000 on the server.
 - I 'bind' a mounted drive on the server to a drive on the docker container. This is needed so I can SSH into the server with my windows VDI and develop in VS Code!
 - It is important to note that use of the `--rm` flag will destroy the container upon exit. Any state that one would like persisted after the container exits should accommodate accordingly. 
-- The image will be pulled from dockerhub in the landonchambers/minerl repository. This should pull the latest version of the image that Landon is using. The docker image is composed of the latest pytorch image and installs dependecies for running minerl (like jdk 1.8 and xvfb). I will include a link to the dockerfile in the future!
+- The image will be pulled from dockerhub in the landonchambers/minerl repository. Dockerfile [here](https://github.com/lmc5190/minerl/blob/master/Dockerfile)
 
 The container has Ubuntu OS 16.04 so remember to use Debian commands!
 
