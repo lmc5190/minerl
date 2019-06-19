@@ -18,7 +18,7 @@ The servers are named GPU1 and GPU2 located at 172.20.5.18 and 172.20.5.19
 ## Container
 Landon has been using a Pytorch docker container to run and develop code!
 
-Example docker container
+Example docker container run
 
 `NV_GPU=0 nvidia-docker run  --cpus="6" -m="112g" --rm  -ti --ipc=host -p 4000:800 
 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace 
@@ -30,6 +30,11 @@ landonchambers/minerl`
 - I 'bind' a mounted drive on the server to a drive on the docker container. This is needed so I can SSH into the server with my windows VDI and develop in VS Code!
 - It is important to note that use of the `--rm` flag will destroy the container upon exit. Any state that one would like persisted after the container exits should accommodate accordingly. 
 - The image will be pulled from dockerhub in the landonchambers/minerl repository. Dockerfile [here](https://github.com/lmc5190/minerl/blob/master/Dockerfile)
+
+On GPU1 server, the command is a bit different since there seems to be a different version of nvidia-docker (THIS NEEDS TO BE FIXED!)
+
+`docker run --runtime=nvidia  -e NVIDIA_VISIBLE_DEVICES=0 --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 \
+--mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl`
 
 The container has Ubuntu OS 16.04 so remember to use Debian commands!
 
