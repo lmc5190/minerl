@@ -60,8 +60,8 @@ Peform the following steps *on the client*:
 - Start a PuTTY session and input server IP address
 - Under Connections > SSH > X11 : Enable X11 forwarding and enter localhost:5920 as the X Display Location
 
-### The Server (I have already performed these steps on server gpu2)
-You must enable X11 forwarding in the system's ssh config files *on the server*.
+### The Server
+You must enable X11 forwarding in the system's ssh config files *on the server*. Note, Landon already did this on gpu2.
 - Sudo Open ssh_config and set Forwardagent and ForwardXll to yes
 - Sudo Open sshd_config and set AllowAgentForward, AllowTcpForwarding, and X11 Forwarding to yes
 - If any of these settings need to be changed, you must reboot the server to apply these settings!
