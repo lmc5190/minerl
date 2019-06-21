@@ -3,6 +3,9 @@ import minerl
 #Data is accessed by making a dataset from one of the minerl environments 
 #and iterating over it using one of the iterators provided by the minerl.data.DataPipeline
 
+#download data (only need to to this once, or when data is updated!)
+minerl.data.download('/workspace/data')
+
 #num_workers is number of files to load at once. Defaults to 4..
 data = minerl.data.make('MineRLObtainDiamond-v0', num_workers=4)
 
