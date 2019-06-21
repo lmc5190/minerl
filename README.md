@@ -50,9 +50,42 @@ Follow instructions [here](https://code.visualstudio.com/docs/remote/ssh) and se
 ## View the Minecraft Rendering with VNC
 Oh the joys of virtual rendering within a docker container on a headless server. Can you actually visualize the rendering in real-time from a Windows VDI? Well, the good news is, yes, you can! In other news, Landon only had to crash one server and spend 3-4 days of his life to figure out a working process.
 
-There are three systems to configure appropriately: the client, the server, and the docker container. The client is the machine where you can currently see a desktop! The docker container runs the code that is rendering your environment, and the server is hosting the docker container. The question is: how to you pass the rendered video from the docker container to your client through a connection that must pass through the server? Let's get into it!
+There are three systems to configure appropriately: the client, the server, and the docker container. The client is the machine where you can currently see a desktop! The docker container runs the code that is rendering your environment, and the server is hosting the docker container. The question is: how to you pass the rendered video from the docker container to your client through a connection that must start at client, penetrate thru the server, and within the server, pick up the rednered video signal in an "isolated" docker container? Let's get into it!
 
-# The Client
+### The Client
 This is, for example, a Windows VDI or some VDI outside of the server. You must do two major things.
 - Dowload a VNC Viewer. [Here is the one I used](https://www.realvnc.com/en/connect/download/viewer/)
-- Connect to your server through PuTTY with 
+- PuTTY
+Peform the following steps *on the client*:
+- Start a PuTTY session and input server IP address
+- Under Connections > SSH > X11 : Enable X11 forwarding and enter localhost:5920 as the X Display Location
+
+### The Server (I have already performed these steps on server gpu2)
+You must enable X11 forwarding in the system's ssh config files *on the server*.
+- Sudo Open ssh_config and set Forwardagent and ForwardXll to yes
+- Sudo Open sshd_config and set AllowAgentForward, AllowTcpForwarding, and X11 Forwarding to yes
+- If any of these settings need to be changed, you must reboot the server to apply these settings!
+
+You can now open the docker container. Note: the startegy will be to have the Docker container listen for X11 VNC connections on port 5920, and out of convenience, our docker run command will map port 5920 on the server to 5920 on the container. *I recommend running the docker container on a seperate terminal*. So, we first set the display environment variable on the server before starting the container.
+
+`export DISPLAY=localhost:5920`
+
+`NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
+`
+### The Container
+The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), start rendering our lovely Minecraft environment on the virtual montior, and 
+
+ssh_config
+   Forwardagent yes
+   ForwardX11 yes
+sshd_config   
+   AllowAgentForwarding yes
+   AllowTcpForwarding yes
+   GatewayPorts no
+   X11Forwarding yes
+   X11DisplayOffset 10
+   X11UseLocalhost no
+
+Start a PuTTY session and enter the IP address for server. Then, under SSH settings, 
+
+### The Server
