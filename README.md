@@ -73,7 +73,22 @@ You can now open the docker container. Note: the startegy will be to have the Do
 `NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
 `
 ### The Container
-The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), start rendering our lovely Minecraft environment on the virtual montior, and 
+The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), point the VNC viewer to our display on ServerIPAddress:5920, and start rendering our lovely Minecraft environment on the virtual montior. Do the next few steps *within the container*.
+- Make sure x11vnc is installed (should be built into dockerfile)
+- Set the display to port 5920. `export DISPLAY=:20`
+- Run the following code to kickoff the virtural monitor
+```
+Xvfb :20 -screen 0 1280x1024x24 &
+x11vnc -passwd TestVNC -display :20 -N -forever
+```
+- *On the client* run your VNC Client and connect to ServerIPAddress:5920
+- Type in the password you set (above we used TestVNC as the pw)
+- *In the container* Press CTRL+C to get back to the terminal directory and run your script!
+
+You should shortly see Minecraft rendering in your VNC Viewer :)
+
+
+
 
 ssh_config
    Forwardagent yes
