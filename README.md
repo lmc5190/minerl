@@ -20,9 +20,8 @@ Landon has been using a Pytorch docker container to run and develop code!
 
 Example docker container run
 
-`NV_GPU=0 nvidia-docker run  --cpus="6" -m="112g" --rm  -ti --ipc=host -p 4000:800 
---mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace 
-landonchambers/minerl`
+`NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
+`
 
 - NV_GPU=0 isolates GPU 0. To isolate two GPUS, you could use NV_GPU=1,2 for example.
 - restricted to 6 cpus and 112GB of memory
