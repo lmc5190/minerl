@@ -45,3 +45,14 @@ Follow instructions [here](https://code.visualstudio.com/docs/remote/ssh) and se
 - Installed Git for Windows for OpenSSH compatible SSH client
 - Installed the Remote Development extension pack using the extension installer in VS Code
 - Enabled the "show terminal" setting for the Remote Development extension and used ssh password to login to server. 
+
+
+## View the Minecraft Rendering with VNC
+Oh the joys of virtual rendering within a docker container on a headless server. Can you actually visualize the rendering in real-time from a Windows VDI? Well, the good news is, yes, you can! In other news, Landon only had to crash one server and spend 3-4 days of his life to figure out a working process.
+
+There are three systems to configure appropriately: the client, the server, and the docker container. The client is the machine where you can currently see a desktop! The docker container runs the code that is rendering your environment, and the server is hosting the docker container. The question is: how to you pass the rendered video from the docker container to your client through a connection that must pass through the server? Let's get into it!
+
+# The Client
+This is, for example, a Windows VDI or some VDI outside of the server. You must do two major things.
+- Dowload a VNC Viewer. [Here is the one I used](https://www.realvnc.com/en/connect/download/viewer/)
+- Connect to your server through PuTTY with 
