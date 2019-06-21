@@ -79,9 +79,9 @@ The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapp
 - Run the following code to kickoff the virtural monitor
 ```
 Xvfb :20 -screen 0 1280x1024x24 &
-x11vnc -passwd TestVNC -display :20 -N -forever
+x11vnc -passwd TestVNC -display :20 -N -forever &
 ```
 - *On the client* run your VNC Client and connect to ServerIPAddress:5920
 - Type in the password you set (above we used TestVNC as the pw)
-- *In the container* in the terminal running the VNC Client, start typing and you should see your directory. Now Run your script normally `python yourscript.py`.
+- *In the container* in the terminal running the VNC Client (which should be running in background)  Run your script normally `python yourscript.py`.
 You should shortly see Minecraft rendering in your VNC Viewer :)
