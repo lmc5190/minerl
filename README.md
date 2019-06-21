@@ -86,21 +86,3 @@ x11vnc -passwd TestVNC -display :20 -N -forever
 - *In the container* Press CTRL+C to get back to the terminal directory and run your script!
 
 You should shortly see Minecraft rendering in your VNC Viewer :)
-
-
-
-
-ssh_config
-   Forwardagent yes
-   ForwardX11 yes
-sshd_config   
-   AllowAgentForwarding yes
-   AllowTcpForwarding yes
-   GatewayPorts no
-   X11Forwarding yes
-   X11DisplayOffset 10
-   X11UseLocalhost no
-
-Start a PuTTY session and enter the IP address for server. Then, under SSH settings, 
-
-### The Server
