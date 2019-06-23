@@ -12,7 +12,7 @@ RUN apt-get update -y && \
     apt-get install -y openjdk-8-jdk && \
     pip install minerl
 
-#install xorg and xvfb for rendering in headless server
+#install xorg and xvfb for rendering in headless server, install x11vnc to view rendering.
 RUN apt-get install -y xorg openbox && \
     apt-get install -y xvfb && \
     apt-get install -y git x11vnc

@@ -16,7 +16,6 @@ net_reward = 0
 
 while not done:
         action = env.action_space.noop()
-        env.render()
 
         action['camera'] = [0, 0.03*obs["compassAngle"]]
         action['back'] = 0
@@ -25,6 +24,7 @@ while not done:
         action['attack'] = 1
 
         obs, reward, done, info = env.step(action)
+        env.render()
 
         net_reward += reward
         print("Total reward: ", net_reward)
