@@ -18,31 +18,43 @@ import numpy as np
 #number of parallel workers when making the data object, or
 #move the data to a faster drive
 
-# Sample some data from the dataset!
-data = minerl.data.make("MineRLNavigateDense-v0")
+#minerl.data.download('/workspace/data')
+
+#create a data pipeline
+data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
+
+#set pipeline parameters
 num_epochs=1
-max_sequence_len = 32
-sequence_limit=1
-required_shape = (64,64,3)
-total_obs=[]
-for obs, rew, done, act in itertools.islice(\
-                                            data.seq_iter(num_epochs=num_epochs,\
-                                            max_sequence_len=max_sequence_len),\
-                                            sequence_limit):
-    total_img = []
-    for image in obs['pov']:
-        if image.shape == required_shape:
-            total_img.append(image)
-            print("image stored!")
-        else:
-            print("throwing out image of incorrect shape!")
-    total_obs.append(total_img)
+batch_size=32
 
-#one image (64x64 pixels with 3 color channels)
-#total_obs[0][0].shape
-#(64, 64, 3)
+#iterate through dataset
+shortseqct=0
+i=0
+for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_size):
+    i=i+1
+    val=obs['compassAngle'][0][0]
+    if i==1:
+        minval=val
+        maxval=val
+    else:
+        if(val < minval):
+            minval=val
+        if(val > maxval):
+            maxval=val
+    actual_sequence_len = obs['pov'].shape[0]
+    if( actual_sequence_len != batch_size):
+        print("need to pad sequence!")
 
-# Iterate through a single epoch using sequences of at most 32 steps
-#for obs, rew, done, act in data.seq_iter(num_epochs=1, batch_size=32):
-    # Do something
-    
+# pad_loc is a tuple of (n_before, n_after) for each dimension,
+# where (0,0) means no padding in this dimension
+
+#!!!Pad pov
+#pad_len=batch_size - actual_sequence_len
+#pad_rule=((0,pad_len),(0,0),(0,0),(0,0))
+#x=np.pad(obs['pov'],pad_rule, mode='edge') OR
+#x=np.pad(obs['pov'],pad_rule, mode='constant')
+#NEED TO TEST ZERO PADDING!!!
+
+#!!!Pad Compass Angle
+
+#exec(open('navigatedense.py').read())
