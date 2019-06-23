@@ -66,20 +66,21 @@ Peform the following steps *on the client*:
 - Under Connections > SSH > X11 : Enable X11 forwarding and enter localhost:5920 as the X Display Location
 
 ### The Server
-You must enable X11 forwarding in the system's ssh config files *on the server*. Note, Landon already did this on gpu2.
+The server does not allow X11 forwarding natively. You must enable X11 forwarding in the system's ssh config files *on the server*. (Landon already did this on gpu2)
 - Sudo open ssh_config. Set Forwardagent and ForwardXll to "yes"
 - Sudo open sshd_config. Set AllowAgentForward, AllowTcpForwarding, and X11 Forwarding to "yes"
-- If any of these settings need to be changed, you must reboot the server to apply these settings!
+- If any of the above settings changed, you must reboot the server to apply these settings!
 
-Now create a docker container. Note: the startegy will be to have the Docker container listen for X11 VNC connections on port 5920, and out of convenience, our docker run command will map port 5920 on the server to 5920 on the container. So, we first set the display environment variable on the server before starting the container.
+Now create a docker container. The command for "docker-run" will require an important port mapping "5920:5920". This maps 5920 on the server to 5920 on the docker container, allowing for communication through these ports. We set the display environment variable *on the server* before starting the container.
 
 `export DISPLAY=localhost:5920`
 
 `NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
 `
 ### The Container
-The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), point the VNC viewer to our display on ServerIPAddress:5920, and start rendering our lovely Minecraft environment on the virtual montior. Do the next few steps *within the container*.
-- Make sure x11vnc is installed (should be built into dockerfile)
+The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), point the VNC viewer to our display on ServerIPAddress:5920.
+
+Do the next few steps *within the container*, which will require dependencies that can be found within the dockerfile.
 - Set the display to port 5920. `export DISPLAY=:20`
 - Run the following code to kickoff the virtural monitor
 ```
@@ -88,5 +89,5 @@ x11vnc -passwd TestVNC -display :20 -N -forever &
 ```
 - *On the client* run your VNC Client and connect to ServerIPAddress:5920
 - Type in the password you set (above we used TestVNC as the pw)
-- *In the container* in the terminal running the VNC Client (which should be running in background)  Run your script normally `python yourscript.py`.
+- *In the container* Run your script normally `python yourscript.py`.
 You should shortly see Minecraft rendering in your VNC Viewer :)
