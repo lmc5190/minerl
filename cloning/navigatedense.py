@@ -31,30 +31,49 @@ batch_size=32
 shortseqct=0
 i=0
 for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_size):
-    i=i+1
-    val=obs['compassAngle'][0][0]
-    if i==1:
-        minval=val
-        maxval=val
-    else:
-        if(val < minval):
+    for dirt in obs['inventory']['dirt']:
+        i=i+1
+        val=dirt
+        if i==1:
             minval=val
-        if(val > maxval):
             maxval=val
+        else:
+            if(val < minval):
+                minval=val
+            if(val > maxval):
+                maxval=val
+    
     actual_sequence_len = obs['pov'].shape[0]
     if( actual_sequence_len != batch_size):
         print("need to pad sequence!")
 
+print(minval, maxval)
 # pad_loc is a tuple of (n_before, n_after) for each dimension,
 # where (0,0) means no padding in this dimension
 
-#!!!Pad pov
+#
+# Notes on State
+#
+
+#Pad pov [0,255]
+#for img in obs['pov']
+#    val=img
 #pad_len=batch_size - actual_sequence_len
 #pad_rule=((0,pad_len),(0,0),(0,0),(0,0))
 #x=np.pad(obs['pov'],pad_rule, mode='edge') OR
 #x=np.pad(obs['pov'],pad_rule, mode='constant')
 #NEED TO TEST ZERO PADDING!!!
 
-#!!!Pad Compass Angle
+#Pad Compass Angle [-180,0]
+#for compassAngle in obs['compassAngle']:    
+#    val=compassAngle[0]
 
+#Inventory Dirt! [0, 166] 
+#could scale to max amount of dirt [0, 1] using max possible dirt 64*36
+#for dirt in obs['inventory']['dirt']:
+#        val=dirt
 #exec(open('navigatedense.py').read())
+
+#
+# Notes on Actions
+#
