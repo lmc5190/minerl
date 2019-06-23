@@ -57,7 +57,7 @@ VNC rendering requires the configuration of three systems.
 
 The client is a machine that renders a desktop for you already. The docker container runs the code that renders your images and is hosted on a server. How to you pass the rendered video from the docker container to your client? Let's get into it!
 
-### The Client
+### Client
 This is, for example, a Windows VDI or some VDI outside of the headless server. The strategy is to view the rednered image with a VNC viewer. The steps below will enable this capability.
 - Download a VNC Viewer. [Here is the one I used](https://www.realvnc.com/en/connect/download/viewer/)
 - Download PuTTY
@@ -65,7 +65,7 @@ Peform the following steps *on the client*:
 - Start a PuTTY session and input server IP address
 - Under Connections > SSH > X11 : Enable X11 forwarding and enter localhost:5920 as the X Display Location
 
-### The Server
+### Server
 The server does not allow X11 forwarding natively. You must enable X11 forwarding in the system's ssh config files *on the server*. (Landon already did this on gpu2)
 - Sudo open ssh_config. Set Forwardagent and ForwardXll to "yes"
 - Sudo open sshd_config. Set AllowAgentForward, AllowTcpForwarding, and X11 Forwarding to "yes"
@@ -78,10 +78,10 @@ Now create a docker container. The command for "docker-run" will require an impo
 ```
 NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
 ```
-### The Container
+### Container
 The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports) and point the VNC viewer the server's display on ServerIPAddress:5920.
 
-Do the next few steps *within the container*, which requires dependencies built within the Docker Image. See [Dockerfile](https://github.com/lmc5190/minerl/blob/master/Dockerfile).
+Do the next few steps *within the container*, which requires dependencies built within the Docker image. See [Dockerfile](https://github.com/lmc5190/minerl/blob/master/Dockerfile).
 - Set the display to port 5920. `export DISPLAY=:20`
 - Run the following code to kickoff the virtural monitor
 ```
