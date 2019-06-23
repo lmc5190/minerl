@@ -75,12 +75,12 @@ Now create a docker container. The command for "docker-run" will require an impo
 
 `export DISPLAY=localhost:5920`
 
-`NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
-`
+```NV_GPU=0 nvidia-docker run --cpus="6" -m="112g" --rm -ti --ipc=host -p 5920:5920 --mount type=bind,src=/home/landon_chambers@SAAS.LOCAL/minerl,dst=/workspace landonchambers/minerl
+```
 ### The Container
-The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports), point the VNC viewer to our display on ServerIPAddress:5920.
+The startegy here is to kickoff a virtual monitor on :20 (turns out, :20 is mapped to port 5920 when we are talking about display ports) and point the VNC viewer the server's display on ServerIPAddress:5920.
 
-Do the next few steps *within the container*, which will require dependencies that can be found within the dockerfile.
+Do the next few steps *within the container*, which requires dependencies built within the Docker Image. See [Dockerfile](https://github.com/lmc5190/minerl/blob/master/Dockerfile).
 - Set the display to port 5920. `export DISPLAY=:20`
 - Run the following code to kickoff the virtural monitor
 ```
