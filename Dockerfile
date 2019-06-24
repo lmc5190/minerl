@@ -20,6 +20,7 @@ RUN apt-get install -y xorg openbox && \
 
 #Set Environment Variables
 ENV DISPLAY=:20
+ENV MINERL_DATA_ROOT="/workspace/data"
 
 #Expose port 1337
 EXPOSE 1337

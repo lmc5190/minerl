@@ -1,7 +1,19 @@
 import minerl
 import gym
 import itertools
+
 import numpy as np
+import torch
+import torchvision
+import torchvision.transforms as transforms
+
+def normalize_tensor(x,xmin,xmax,a,b):
+    #transform elements of tensor x in approximate range [xmin,xmax] to [a,b]
+    #a simple linear transformation will accomplish this
+    A = (b-a)/(xmax-xmin)
+    B = a + (b-a)*xmin/(xmax-xmin)
+
+    return A*x + B
 
 #ABOUT DATA PIPELINE
 #data.seq_iter should give you at most max_sequence_len from a single example
@@ -27,29 +39,38 @@ data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 num_epochs=1
 batch_size=32
 
-#iterate through dataset
+#iterate through dataset to pull samples, shape the states and actions, and train 
 shortseqct=0
 i=0
 for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_size):
-    for dirt in obs['inventory']['dirt']:
-        i=i+1
-        val=dirt
-        if i==1:
-            minval=val
-            maxval=val
-        else:
-            if(val < minval):
-                minval=val
-            if(val > maxval):
-                maxval=val
+    
+    true_batch_size = obs['pov'].shape[0]        
+
+    #parse data into torch tensors
+    img = torch.from_numpy(obs['pov']) # (true_batch_size, 64, 64, 3)
+    compassAngle = torch.from_numpy(obs['compassAngle'][:,0]).view(true_batch_size, -1) #(true_batch_size, 1)
+    dirt = torch.from_numpy(obs['inventory']['dirt']).view(true_batch_size, -1) #(true_batch_size, 1)
+
+    #normalize tensors
+    img = normalize_tensor(img,0,255,-1,1)
+    compassAngle = normalize_tensor(compassAngle,-180,0,-1,1)
+    dirt = normalize_tensor(dirt,0,64*36,-1,1)
+    #[-1,1] for images
+    #
+    
+    
+    #print(img.shape)
+    print(compassAngle.shape)
+    print(dirt.shape)
     
     actual_sequence_len = obs['pov'].shape[0]
     if( actual_sequence_len != batch_size):
         print("need to pad sequence!")
 
-print(minval, maxval)
 # pad_loc is a tuple of (n_before, n_after) for each dimension,
 # where (0,0) means no padding in this dimension
+
+
 
 #
 # Notes on State
@@ -64,16 +85,31 @@ print(minval, maxval)
 #x=np.pad(obs['pov'],pad_rule, mode='constant')
 #NEED TO TEST ZERO PADDING!!!
 
-#Pad Compass Angle [-180,0]
+#Compass Angle [-180,0]
 #for compassAngle in obs['compassAngle']:    
 #    val=compassAngle[0]
 
-#Inventory Dirt! [0, 166] 
+#Inventory Dirt [0, 166] 
 #could scale to max amount of dirt [0, 1] using max possible dirt 64*36
 #for dirt in obs['inventory']['dirt']:
 #        val=dirt
-#exec(open('navigatedense.py').read())
 
 #
 # Notes on Actions
 #
+
+#Set of Most Actions {0,1} binary
+#Attack, back, forward, jump, right, sneak, sprint
+#for actionname in act['actionname']
+#   val=actionanme
+
+#Camera Action: deltaPitch [-92.4, 71.1] and deltaYaw [-158.09666, 177]
+# where  pitch is vertical angle and yaw is horizontal angle
+#for camera in act['camera']:
+#   pitch,yaw=camera[0],camera[1]
+
+#Place Dirt {0,1} binary
+#for place in act['place']:
+    #val=place
+
+#exec(open('navigatedense.py').read())
