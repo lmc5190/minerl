@@ -64,20 +64,11 @@ obs, _ = env.reset()
 done = False
 net_reward = 0
 
+stepct=0
 while not done:
-        action = env.action_space.noop()
+    action = env.action_space.noop()
 
-        obs, reward, done, info = env.step(action)
-        env.render()
-
-        net_reward += reward
-        print("Total reward: ", net_reward)
-
-        img = torch.from_numpy(obs['pov']).double().to(device)
-        with torch.no_grad():
-            img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
-            output = net(img)
-
+    if(stepct > 0):
         action['attack'] = 1 if output[0][0].item() >= threshold else 0
         action['back'] = 1 if output[0][1].item() >= threshold else 0
         action['forward'] = 1 if output[0][2].item() >= threshold else 0
@@ -86,4 +77,17 @@ while not done:
         action['sneak'] = 1 if output[0][5].item() >= threshold else 0
         action['sprint'] = 1 if output[0][6].item() >= threshold else 0
         action['placedirt'] = 1 if output[0][7].item() >= threshold else 0
-        action['camera'] = [output[0][8].item(), output[0][9].item()]
+        action['camera'] = [normalize_tensor(output[0][8],0,1.0,-100.0,100.0).item(),\
+                         normalize_tensor(output[0][9],0,1.0,-180.0,180.0).item()]
+
+    obs, reward, done, info = env.step(action)
+    env.render()
+
+    net_reward += reward
+    print("Total reward: ", net_reward)
+
+    img = torch.from_numpy(obs['pov']).double().to(device)
+    with torch.no_grad():
+        img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
+        output = net(img)
+    stepct=stepct+1
