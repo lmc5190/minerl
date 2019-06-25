@@ -43,21 +43,21 @@ net = torch.load('net_navigatedense.pt', map_location=device)
 #create a data pipeline
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
+#decision threshold
+threshold=0.5
+
 #set pipeline parameters
 num_epochs=1
 batch_size=1
-
+'''
 for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len=batch_size):
     img = torch.from_numpy(obs['pov']).double().to(device)
     with torch.no_grad():
         img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
         output = net(img)
     print(output)
-
-
-
-
 '''
+
 env = gym.make('MineRLNavigateDense-v0')
 
 obs, _ = env.reset()
@@ -70,13 +70,20 @@ while not done:
         obs, reward, done, info = env.step(action)
         env.render()
 
-        action['camera'] = [0, 0.03*obs["compassAngle"]]
-        action['back'] = 0
-        action['forward'] = 1
-        action['jump'] = 1
-        action['attack'] = 1
-
-
         net_reward += reward
         print("Total reward: ", net_reward)
-'''
+
+        img = torch.from_numpy(obs['pov']).double().to(device)
+        with torch.no_grad():
+            img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
+            output = net(img)
+
+        action['attack'] = 1 if output[0][0].item() >= threshold else 0
+        action['back'] = 1 if output[0][1].item() >= threshold else 0
+        action['forward'] = 1 if output[0][2].item() >= threshold else 0
+        action['jump'] = 1 if output[0][3].item() >= threshold else 0
+        action['right'] = 1 if output[0][4].item() >= threshold else 0
+        action['sneak'] = 1 if output[0][5].item() >= threshold else 0
+        action['sprint'] = 1 if output[0][6].item() >= threshold else 0
+        action['placedirt'] = 1 if output[0][7].item() >= threshold else 0
+        action['camera'] = [output[0][8].item(), output[0][9].item()]

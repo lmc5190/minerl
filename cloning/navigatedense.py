@@ -81,10 +81,10 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     jump = torch.from_numpy(act['jump']).view(true_batch_size, -1).double() 
     right = torch.from_numpy(act['right']).view(true_batch_size, -1).double() 
     sneak = torch.from_numpy(act['sneak']).view(true_batch_size, -1).double() 
-    sprint = torch.from_numpy(act['sprint']).view(true_batch_size, -1).double() 
+    sprint = torch.from_numpy(act['sprint']).view(true_batch_size, -1).double()
+    placedirt = torch.from_numpy(act['place']).view(true_batch_size, -1).double()
     deltapitch = torch.from_numpy(act['camera'][..., 0]).view(true_batch_size, -1).double()
-    deltayaw = torch.from_numpy(act['camera'][..., 1]).view(true_batch_size, -1).double() 
-    placedirt = torch.from_numpy(act['place']).view(true_batch_size, -1).double() 
+    deltayaw = torch.from_numpy(act['camera'][..., 1]).view(true_batch_size, -1).double()  
 
     #normalize scalar values in tensors
     with torch.no_grad():
