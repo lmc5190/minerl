@@ -117,6 +117,9 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
         running_loss = 0.0
     i=i+1
 
+#COMMAND TO SAVE MODEL
+#torch.save(net, 'net_navigatedense.pt')
+
 # pad_loc is a tuple of (n_before, n_after) for each dimension,
 # where (0,0) means no padding in this dimension
 
