@@ -7,6 +7,7 @@ import torch
 
 import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
 
 
 class Net(nn.Module):
@@ -16,25 +17,22 @@ class Net(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(4, 8, 4)
         self.conv3 = nn.Conv2d(8, 16, 3)
-        self.fc1 = nn.Linear(16 * 6 * 6, 140)
-        self.fc2 = nn.Linear(140, 84)
+        self.fc1 = nn.Linear(16 * 6 * 6, 120)
+        self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x))) # 64 -> 62 -> 31 
         x = self.pool(F.relu(self.conv2(x))) # 31 -> 28 -> 14
-        x = self.pool(f.relu(self.conv3(x))) # 14 -> 12 -> 6
+        x = self.pool(F.relu(self.conv3(x))) # 14 -> 12 -> 6
         x = x.view(-1, 16 * 6 * 6) 
-        x = F.relu(self.fc1(x)) # 16*6*6 -> 140
-        x = F.relu(self.fc2(x)) # 140 -> 84
-        x = self.fc3(x)         # 84 -> 10
+        x = F.relu(self.fc1(x)) # 16*6*6 -> 120
+        x = F.relu(self.fc2(x)) # 120 -> 84
+        x = self.fc3(x) # 84 -> 10, can try sigmoid here?
         return x
 
-
-net = Net()
-
 def normalize_tensor(x,xmin,xmax,a,b):
-    #transform elements of tensor x in approximate range [xmin,xmax] to [a,b
+    #transform elements of tensor x in approximate range [xmin,xmax] to [a,b]
     A = (b-a)/(xmax-xmin)
     B = a - (b-a)*xmin/(xmax-xmin)
     return A*x + B
@@ -43,28 +41,33 @@ def normalize_tensor(x,xmin,xmax,a,b):
 #data.seq_iter should give you at most max_sequence_len from a single example
 #- it could return less (e.g. at the end of a single demonstration)
 #num_epochs is the number of epochs through through the entire dataset for a given
-#experiment. So if you set num_epochs=2 you should see every human demonstration 
-#2 times before the iterator runs out. Feel free to expand this interface,
-#we welcome pull-requests to add additional functionality
-#such as randomly sampling sequences from the entire dataset without using
-#too much memory
+#experiment.
 
-#There are a good number of samples in the dataset - it certainly loops
-#for a while #If you have more ram consider increasing the 
-#number of parallel workers when making the data object, or
-#move the data to a faster drive
-
+#download if needed
 #minerl.data.download('/workspace/data')
 
 #create a data pipeline
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
 #set pipeline parameters
-num_epochs=1
+num_epochs=2
 batch_size=32
 
-#iterate through dataset to pull samples, shape the states and actions, and train 
-for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_size):
+#create network, put on gpu
+net = Net()
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print(device)
+net.to(device, dtype=torch.double)
+
+
+#create optimizer for weights
+criterion = nn.MSELoss()
+optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+
+#iterate through dataset to pull samples, shape the states and actions, and train
+running_loss = 0.0
+i=0
+for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len=batch_size):
     
     true_batch_size = obs['pov'].shape[0]        
 
@@ -96,12 +99,23 @@ for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_si
 
     #shape action tensor (true_batch_size, 10)
     action = torch.cat((attack,back,forward,jump,right,\
-                        sneak,sprint,deltapitch,deltayaw,placedirt),1) 
+                        sneak,sprint,placedirt, deltapitch,deltayaw),1) 
 
+    # forward + backward + optimize
+    optimizer.zero_grad()
+    img, action = img.to(device), action.to(device)
+    output = net(img)
+    loss = criterion(output, action)
+    loss.backward()
+    optimizer.step()
 
-    actual_sequence_len = obs['pov'].shape[0]
-    if( actual_sequence_len != batch_size):
-        print("maybe need to pad sequence?")
+    # print statistics
+    running_loss += loss.item()
+    if i % 2000 == 1999:    # print every 2000 mini-batches
+        print('[%5d] loss: %.3f' %
+            (i + 1, running_loss / 2000))
+        running_loss = 0.0
+    i=i+1
 
 # pad_loc is a tuple of (n_before, n_after) for each dimension,
 # where (0,0) means no padding in this dimension
