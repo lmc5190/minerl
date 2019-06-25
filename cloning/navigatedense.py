@@ -4,15 +4,11 @@ import itertools
 
 import numpy as np
 import torch
-import torchvision
-import torchvision.transforms as transforms
 
 def normalize_tensor(x,xmin,xmax,a,b):
-    #transform elements of tensor x in approximate range [xmin,xmax] to [a,b]
-    #a simple linear transformation will accomplish this
+    #transform elements of tensor x in approximate range [xmin,xmax] to [a,b
     A = (b-a)/(xmax-xmin)
-    B = a + (b-a)*xmin/(xmax-xmin)
-
+    B = a - (b-a)*xmin/(xmax-xmin)
     return A*x + B
 
 #ABOUT DATA PIPELINE
@@ -40,37 +36,44 @@ num_epochs=1
 batch_size=32
 
 #iterate through dataset to pull samples, shape the states and actions, and train 
-shortseqct=0
-i=0
 for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_size):
     
     true_batch_size = obs['pov'].shape[0]        
 
     #parse data into torch tensors
-    img = torch.from_numpy(obs['pov']) # (true_batch_size, 64, 64, 3)
-    compassAngle = torch.from_numpy(obs['compassAngle'][:,0]).view(true_batch_size, -1) #(true_batch_size, 1)
-    dirt = torch.from_numpy(obs['inventory']['dirt']).view(true_batch_size, -1) #(true_batch_size, 1)
+    img = torch.from_numpy(obs['pov']).double() # (true_batch_size, 64, 64, 3)
+    compassAngle = torch.from_numpy(obs['compassAngle'][:,0]).view(true_batch_size, -1).double() #(true_batch_size, 1)
+    dirt = torch.from_numpy(obs['inventory']['dirt']).view(true_batch_size, -1).double() 
+    attack = torch.from_numpy(act['attack']).view(true_batch_size, -1).double()
+    back = torch.from_numpy(act['back']).view(true_batch_size, -1).double() 
+    forward = torch.from_numpy(act['forward']).view(true_batch_size, -1).double()
+    jump = torch.from_numpy(act['jump']).view(true_batch_size, -1).double() 
+    right = torch.from_numpy(act['right']).view(true_batch_size, -1).double() 
+    sneak = torch.from_numpy(act['sneak']).view(true_batch_size, -1).double() 
+    sprint = torch.from_numpy(act['sprint']).view(true_batch_size, -1).double() 
+    deltapitch = torch.from_numpy(act['camera'][..., 0]).view(true_batch_size, -1).double()
+    deltayaw = torch.from_numpy(act['camera'][..., 1]).view(true_batch_size, -1).double() 
+    placedirt = torch.from_numpy(act['place']).view(true_batch_size, -1).double() 
 
-    #normalize tensors
-    img = normalize_tensor(img,0,255,-1,1)
-    compassAngle = normalize_tensor(compassAngle,-180,0,-1,1)
-    dirt = normalize_tensor(dirt,0,64*36,-1,1)
-    #[-1,1] for images
-    #
-    
-    
-    #print(img.shape)
-    print(compassAngle.shape)
-    print(dirt.shape)
-    
+    #normalize scalar values in tensors
+    with torch.no_grad():
+        img = normalize_tensor(img,0,255.0,-1.0,1.0)
+        compassAngle = normalize_tensor(compassAngle,-180.0,0,-1.0,1.0)
+        dirt = normalize_tensor(dirt,0,64.0*36,-1.0,1.0)
+        deltapitch =  normalize_tensor(deltapitch,-100.0,100.0,0,1.0)
+        deltayaw =  normalize_tensor(deltayaw,-180.0,180.0,0,1.0)
+
+    #shape action tensor (true_batch_size, 10)
+    action = torch.cat((attack,back,forward,jump,right,\
+                        sneak,sprint,deltapitch,deltayaw,placedirt),1) 
+
+
     actual_sequence_len = obs['pov'].shape[0]
     if( actual_sequence_len != batch_size):
-        print("need to pad sequence!")
+        print("maybe need to pad sequence?")
 
 # pad_loc is a tuple of (n_before, n_after) for each dimension,
 # where (0,0) means no padding in this dimension
-
-
 
 #
 # Notes on State
@@ -99,7 +102,7 @@ for obs, rew, done, act in data.seq_iter(num_epochs=1, max_sequence_len=batch_si
 #
 
 #Set of Most Actions {0,1} binary
-#Attack, back, forward, jump, right, sneak, sprint
+#attack, back, forward, jump, right, sneak, sprint
 #for actionname in act['actionname']
 #   val=actionanme
 
