@@ -76,7 +76,7 @@ while not done:
         action['right'] = 1 if output[0][4].item() >= threshold else 0
         action['sneak'] = 1 if output[0][5].item() >= threshold else 0
         action['sprint'] = 1 if output[0][6].item() >= threshold else 0
-        action['placedirt'] = 1 if output[0][7].item() >= threshold else 0
+        action['place'] = 1 if output[0][7].item() >= threshold else 0
         action['camera'] = [normalize_tensor(output[0][8],0,1.0,-100.0,100.0).item(),\
                          normalize_tensor(output[0][9],0,1.0,-180.0,180.0).item()]
 
@@ -86,7 +86,9 @@ while not done:
     net_reward += reward
     print("Total reward: ", net_reward)
 
-    img = torch.from_numpy(obs['pov']).double().to(device)
+    img = torch.from_numpy(np.flip(obs['pov'],axis=0).copy()).double()
+    #img = torch.from_numpy(obs['pov']).
+    img=img.to(device)
     with torch.no_grad():
         img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
         output = net(img)

@@ -91,8 +91,8 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
         img = normalize_tensor(img,0,255.0,-1.0,1.0)
         compassAngle = normalize_tensor(compassAngle,-180.0,0,-1.0,1.0)
         dirt = normalize_tensor(dirt,0,64.0*36,-1.0,1.0)
-        deltapitch =  normalize_tensor(deltapitch,-100.0,100.0,0,1.0)
-        deltayaw =  normalize_tensor(deltayaw,-180.0,180.0,0,1.0)
+        deltapitch =  normalize_tensor(deltapitch,-180.0,180.0,0,1.0)
+        deltayaw =  normalize_tensor(deltayaw,-360.0,360.0,0,1.0)
 
     #reshape image tensor
     img=img.view(true_batch_size,3,64,64)
