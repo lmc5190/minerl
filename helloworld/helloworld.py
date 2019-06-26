@@ -1,5 +1,3 @@
-#run with xvfb-run -s "-ac -screen 0 1280x1024x24" python helloworld.py
-
 import gym
 import minerl
 

@@ -10,13 +10,14 @@ RUN apt-get update -y && \
     apt-get install -y software-properties-common && \
     add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get install -y openjdk-8-jdk && \
-    pip install minerl
+    pip install minerl && \
+    pip install -U matplotlib
+
 
 #install xorg and xvfb for rendering in headless server, install x11vnc to view rendering.
 RUN apt-get install -y xorg openbox && \
     apt-get install -y xvfb && \
     apt-get install -y git x11vnc
-
 
 #Set Environment Variables
 ENV DISPLAY=:20

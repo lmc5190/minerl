@@ -17,16 +17,17 @@ class Net(nn.Module):
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(4, 8, 4)
         self.conv3 = nn.Conv2d(8, 16, 3)
-        self.fc1 = nn.Linear(16 * 6 * 6, 120)
+        self.fc1 = nn.Linear(16 * 6 * 6 + 2, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
-    def forward(self, x):
+    def forward(self, x, x_inventory):
         x = self.pool(F.relu(self.conv1(x))) # 64 -> 62 -> 31 
         x = self.pool(F.relu(self.conv2(x))) # 31 -> 28 -> 14
         x = self.pool(F.relu(self.conv3(x))) # 14 -> 12 -> 6
-        x = x.view(-1, 16 * 6 * 6) 
-        x = F.relu(self.fc1(x)) # 16*6*6 -> 120
+        x = x.view(-1, 16 * 6 * 6)
+        x = torch.cat((x,x_inventory),1) #16*6*6 -> 16*6*6+2
+        x = F.relu(self.fc1(x)) # 16*6*6+2 -> 120
         x = F.relu(self.fc2(x)) # 120 -> 84
         x = self.fc3(x) # 84 -> 10, can try sigmoid here?
         return x
@@ -36,12 +37,6 @@ def normalize_tensor(x,xmin,xmax,a,b):
     A = (b-a)/(xmax-xmin)
     B = a - (b-a)*xmin/(xmax-xmin)
     return A*x + B
-
-#ABOUT DATA PIPELINE
-#data.seq_iter should give you at most max_sequence_len from a single example
-#- it could return less (e.g. at the end of a single demonstration)
-#num_epochs is the number of epochs through through the entire dataset for a given
-#experiment.
 
 #download if needed
 #minerl.data.download('/workspace/data')
@@ -94,8 +89,9 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
         deltapitch =  normalize_tensor(deltapitch,-180.0,180.0,0,1.0)
         deltayaw =  normalize_tensor(deltayaw,-360.0,360.0,0,1.0)
 
-    #reshape image tensor
+    #shape observations
     img=img.view(true_batch_size,3,64,64)
+    inventory=torch.cat((compassAngle,dirt),1)
 
     #shape action tensor (true_batch_size, 10)
     action = torch.cat((attack,back,forward,jump,right,\
@@ -103,8 +99,8 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
 
     # forward + backward + optimize
     optimizer.zero_grad()
-    img, action = img.to(device), action.to(device)
-    output = net(img)
+    img, inventory, action = img.to(device), inventory.to(device), action.to(device)
+    output = net(img,inventory)
     loss = criterion(output, action)
     loss.backward()
     optimizer.step()
@@ -119,48 +115,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
 
 #COMMAND TO SAVE MODEL
 #torch.save(net, 'net_navigatedense.pt')
-
-# pad_loc is a tuple of (n_before, n_after) for each dimension,
-# where (0,0) means no padding in this dimension
-
-#
-# Notes on State
-#
-
-#Pad pov [0,255]
-#for img in obs['pov']
-#    val=img
-#pad_len=batch_size - actual_sequence_len
-#pad_rule=((0,pad_len),(0,0),(0,0),(0,0))
-#x=np.pad(obs['pov'],pad_rule, mode='edge') OR
-#x=np.pad(obs['pov'],pad_rule, mode='constant')
-#NEED TO TEST ZERO PADDING!!!
-
-#Compass Angle [-180,0]
-#for compassAngle in obs['compassAngle']:    
-#    val=compassAngle[0]
-
-#Inventory Dirt [0, 166] 
-#could scale to max amount of dirt [0, 1] using max possible dirt 64*36
-#for dirt in obs['inventory']['dirt']:
-#        val=dirt
-
-#
-# Notes on Actions
-#
-
-#Set of Most Actions {0,1} binary
-#attack, back, forward, jump, right, sneak, sprint
-#for actionname in act['actionname']
-#   val=actionanme
-
-#Camera Action: deltaPitch [-92.4, 71.1] and deltaYaw [-158.09666, 177]
-# where  pitch is vertical angle and yaw is horizontal angle
-#for camera in act['camera']:
-#   pitch,yaw=camera[0],camera[1]
-
-#Place Dirt {0,1} binary
-#for place in act['place']:
-    #val=place
+torch.save(net, 'net_navigatedense2_withcompass.pt')
 
 #exec(open('navigatedense.py').read())
