@@ -28,7 +28,7 @@ class Net(nn.Module):
         x = torch.cat((x,x_inventory),1) #16*6*6 -> 16*6*6+2
         x = F.relu(self.fc1(x)) # 16*6*6+2 -> 120
         x = F.relu(self.fc2(x)) # 120 -> 84
-        x = self.fc3(x) # 84 -> 10, can try sigmoid here?
+        x = torch.sigmoid(self.fc3(x)) # 84 -> 10, can try sigmoid here?
         return x
 
 
@@ -41,21 +41,15 @@ def normalize_tensor(x,xmin,xmax,a,b):
 #load model (called net)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
-net = torch.load('net_navigatedense8_withcompass.pt', map_location=device)
-
-#create a data pipeline
-data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
+net = torch.load('models/net_navigatedense20_withcompass.pt', map_location=device)
 
 #decision threshold
 threshold=0.5
 
-#set pipeline parameters
-num_epochs=1
-batch_size=1
-
+#make environment
 env = gym.make('MineRLNavigateDense-v0')
-
 obs, _ = env.reset()
+
 done = False
 net_reward = 0
 reward_list = []
@@ -92,7 +86,7 @@ while not done:
 
     with torch.no_grad():
         img = normalize_tensor(img,0,255.0,-1.0,1.0).view(1,3,64,64)
-        compassAngle = normalize_tensor(compassAngle,-180.0,0,-1.0,1.0)
+        compassAngle = normalize_tensor(compassAngle,-180.0,180.0,-1.0,1.0)
         dirt = normalize_tensor(dirt,0,64.0*36,-1.0,1.0)
         inventory=torch.cat((compassAngle,dirt),1)
 

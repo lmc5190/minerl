@@ -21,6 +21,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 10)
 
+
     def forward(self, x, x_inventory):
         x = self.pool(F.relu(self.conv1(x))) # 64 -> 62 -> 31 
         x = self.pool(F.relu(self.conv2(x))) # 31 -> 28 -> 14
@@ -29,7 +30,7 @@ class Net(nn.Module):
         x = torch.cat((x,x_inventory),1) #16*6*6 -> 16*6*6+2
         x = F.relu(self.fc1(x)) # 16*6*6+2 -> 120
         x = F.relu(self.fc2(x)) # 120 -> 84
-        x = self.fc3(x) # 84 -> 10, can try sigmoid here?
+        x = torch.sigmoid(self.fc3(x)) # 84 -> 10, can try sigmoid here?
         return x
 
 def normalize_tensor(x,xmin,xmax,a,b):
@@ -45,7 +46,7 @@ def normalize_tensor(x,xmin,xmax,a,b):
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
 #set pipeline parameters
-num_epochs=2
+num_epochs=5
 batch_size=32
 
 #create network, put on gpu. Use multiple gpus if you see them.
@@ -87,7 +88,7 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     #normalize scalar values in tensors
     with torch.no_grad():
         img = normalize_tensor(img,0,255.0,-1.0,1.0)
-        compassAngle = normalize_tensor(compassAngle,-180.0,0,-1.0,1.0)
+        compassAngle = normalize_tensor(compassAngle,-180.0,180.0,-1.0,1.0)
         dirt = normalize_tensor(dirt,0,64.0*36,-1.0,1.0)
         deltapitch =  normalize_tensor(deltapitch,-180.0,180.0,0,1.0)
         deltayaw =  normalize_tensor(deltayaw,-360.0,360.0,0,1.0)
@@ -117,6 +118,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     i=i+1
 
 #COMMAND TO SAVE MODEL
-torch.save(net, 'net_navigatedense2_withcompass.pt')
+torch.save(net, 'models/net_navigatedense5_withcompass.pt')
 
 #exec(open('navigatedense.py').read())
