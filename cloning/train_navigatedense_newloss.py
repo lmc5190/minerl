@@ -39,6 +39,14 @@ def normalize_tensor(x,xmin,xmax,a,b):
     B = a - (b-a)*xmin/(xmax-xmin)
     return A*x + B
 
+def zhang_loss(output,target, lambda_L1, lambda_L2, lambda_classify,class_idx_start,class_idx_end):
+    #Loss function inspired by T. Zhang et. al
+    #"Deep imitationlearning for complex manipulation tasks from virtual reality teleoperation"
+    return lambda_L1* nn.L1Loss(output,target)+ \
+           lambda_L2* nn.MSELoss(output,target)+ \
+           nn.MultiLabelSoftMarginLoss(output[:,class_idx_start:(class_idx_end+1)], target[:,class_idx_start:(class_idx_end+1)])
+
+
 #download if needed
 #minerl.data.download('/workspace/data')
 
@@ -46,8 +54,13 @@ def normalize_tensor(x,xmin,xmax,a,b):
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
 #set pipeline parameters
-num_epochs=20
+num_epochs=21
 batch_size=32
+
+#Set loss hyperparameters
+lambda_L1=1.0
+lambda_L2=0.01
+lambda_classify=0.005
 
 #create network, put on gpu. Use multiple gpus if you see them.
 net = Net()
@@ -118,6 +131,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     i=i+1
 
 #COMMAND TO SAVE MODEL
-torch.save(net, 'models/net_navigatedense20.pt')
+torch.save(net, 'models/net_navigatedense21_newloss.pt')
 
 #exec(open('navigatedense.py').read())
