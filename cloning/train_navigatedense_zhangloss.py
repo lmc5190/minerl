@@ -35,16 +35,22 @@ class Net(nn.Module):
 
 def normalize_tensor(x,xmin,xmax,a,b):
     #transform elements of tensor x in approximate range [xmin,xmax] to [a,b]
-    A = (b-a)/(xmax-xmin)
+    A = (b-a)/(xmax-xmin) 
     B = a - (b-a)*xmin/(xmax-xmin)
     return A*x + B
 
 def zhang_loss(output,target, lambda_L1, lambda_L2, lambda_classify,class_idx_start,class_idx_end):
     #Loss function inspired by T. Zhang et. al
     #"Deep imitationlearning for complex manipulation tasks from virtual reality teleoperation"
-    return lambda_L1* nn.L1Loss(output,target)+ \
-           lambda_L2* nn.MSELoss(output,target)+ \
-           nn.MultiLabelSoftMarginLoss(output[:,class_idx_start:(class_idx_end+1)], target[:,class_idx_start:(class_idx_end+1)])
+    #All binary actions must be stored between indicies class_idx_start and class_idx_end
+    L1_loss = nn.L1Loss()
+    L2_loss = nn.MSELoss()
+    classify_loss = nn.MultiLabelSoftMarginLoss()
+    return lambda_L1* L1_loss(output,target) + \
+           lambda_L2* L2_loss(output,target) + \
+           lambda_classify * \
+            classify_loss(output[:,class_idx_start:(class_idx_end+1)], \
+                                                target[:,class_idx_start:(class_idx_end+1)])
 
 
 #download if needed
@@ -54,7 +60,7 @@ def zhang_loss(output,target, lambda_L1, lambda_L2, lambda_classify,class_idx_st
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
 #set pipeline parameters
-num_epochs=21
+num_epochs=10
 batch_size=32
 
 #Set loss hyperparameters
@@ -73,7 +79,8 @@ net.to(device, dtype=torch.double)
 
 
 #create optimizer for weights
-criterion = nn.MSELoss()
+#criterion = nn.MSELoss()
+#criterion  = zhang_loss()
 optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
 #iterate through dataset to pull samples, shape the states and actions, and train
@@ -118,7 +125,8 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     optimizer.zero_grad()
     img, inventory, action = img.to(device), inventory.to(device), action.to(device)
     output = net(img,inventory)
-    loss = criterion(output, action)
+    #loss = criterion(output, action, lambda_L1, lambda_L2, lambda_classify, class_idx_start=0, class_idx_end=7)
+    loss =zhang_loss(output, action, lambda_L1, lambda_L2, lambda_classify, class_idx_start=0, class_idx_end=7)
     loss.backward()
     optimizer.step()
 
@@ -131,6 +139,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     i=i+1
 
 #COMMAND TO SAVE MODEL
-torch.save(net, 'models/net_navigatedense21_newloss.pt')
+torch.save(net, 'models/net_navigatedense6_zhang.pt')
 
 #exec(open('navigatedense.py').read())

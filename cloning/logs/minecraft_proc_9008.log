@@ -1,0 +1,237 @@
+[16:22:32] [EnvServerSocketHandler/INFO]: [STDOUT]: Received from localhost:<MissionInit xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" SchemaVersion="" PlatformVersion="0.37.0">
+                                <Mission>
+    <About>
+        <Summary>Navigation through survival world.</Summary>
+    </About>
+
+    <ModSettings>
+        <MsPerTick>50</MsPerTick>
+    </ModSettings>
+
+    <ServerSection>
+        <ServerInitialConditions>
+            <Time>
+                <StartTime>6000</StartTime>
+                <AllowPassageOfTime>false</AllowPassageOfTime>
+            </Time>
+            <Weather>clear</Weather>
+            <AllowSpawning>false</AllowSpawning>
+        </ServerInitialConditions>
+        <ServerHandlers>
+            <DefaultWorldGenerator forceReset="true"/>
+            <NavigationDecorator>
+                <randomPlacementProperties>
+                    <maxRandomizedRadius>64</maxRandomizedRadius>
+                    <minRandomizedRadius>64</minRandomizedRadius>
+                    <maxRadius>8</maxRadius>
+              
+[16:22:34] [EnvServerSocketHandler/INFO]: [STDOUT]: REPLYING WITH: MALMOOK
+[16:22:34] [Client thread/INFO]: [STDOUT]: Mission received: Navigation through survival world.
+[16:22:34] [Client thread/INFO]: [STDOUT]: CLIENT request state: CREATING_HANDLERS
+[16:22:34] [Client thread/INFO]: [STDOUT]: CLIENT enter state: CREATING_HANDLERS
+[16:22:34] [Client thread/INFO]: [STDOUT]: Starting command server.
+[16:22:34] [Thread-15/INFO]: [STDOUT]: INFO: ->com(0) Listening for messages on port 10664
+[16:22:34] [Client thread/INFO]: [STDOUT]: CLIENT request state: EVALUATING_WORLD_REQUIREMENTS
+[16:22:35] [Client thread/INFO]: [STDOUT]: CLIENT enter state: EVALUATING_WORLD_REQUIREMENTS
+[16:22:35] [Client thread/INFO]: [STDOUT]: CLIENT request state: CREATING_NEW_WORLD
+[16:22:35] [Client thread/INFO]: [STDOUT]: CLIENT enter state: CREATING_NEW_WORLD
+[16:22:37] [Server thread/INFO]: Starting integrated minecraft server version 1.11.2
+[16:22:37] [Server thread/INFO]: Generating keypair
+[16:22:38] [Server thread/INFO]: Injecting existing block and item data into this server instance
+[16:22:38] [Server thread/INFO]: Applying holder lookups
+[16:22:38] [Server thread/INFO]: Holder lookups applied
+[16:22:38] [Server thread/INFO]: Loading dimension 0 (TEMP_0_3a46f643-d7ad-4465-a839-2ff909eb8113) (net.minecraft.server.integrated.IntegratedServer@3d310a4)
+[16:22:40] [Server thread/INFO]: Loading dimension 1 (TEMP_0_3a46f643-d7ad-4465-a839-2ff909eb8113) (net.minecraft.server.integrated.IntegratedServer@3d310a4)
+[16:22:40] [Server thread/INFO]: Loading dimension -1 (TEMP_0_3a46f643-d7ad-4465-a839-2ff909eb8113) (net.minecraft.server.integrated.IntegratedServer@3d310a4)
+[16:22:40] [Server thread/INFO]: Preparing start region for level 0
+[16:22:41] [Server thread/INFO]: Preparing spawn area: 4%
+[16:22:42] [Server thread/INFO]: Preparing spawn area: 7%
+[16:22:43] [Server thread/INFO]: Preparing spawn area: 9%
+[16:22:44] [Server thread/INFO]: Preparing spawn area: 13%
+[16:22:45] [Server thread/INFO]: Preparing spawn area: 16%
+[16:22:46] [Server thread/INFO]: Preparing spawn area: 20%
+[16:22:47] [Server thread/INFO]: Preparing spawn area: 24%
+[16:22:48] [Server thread/INFO]: Preparing spawn area: 28%
+[16:22:49] [Server thread/INFO]: Preparing spawn area: 32%
+[16:22:50] [Server thread/INFO]: Preparing spawn area: 36%
+[16:22:51] [Server thread/INFO]: Preparing spawn area: 40%
+[16:22:52] [Server thread/INFO]: Preparing spawn area: 44%
+[16:22:53] [Server thread/INFO]: Preparing spawn area: 49%
+[16:22:54] [Server thread/INFO]: Preparing spawn area: 54%
+[16:22:55] [Server thread/INFO]: Preparing spawn area: 59%
+[16:22:56] [Server thread/INFO]: Preparing spawn area: 64%
+[16:22:57] [Server thread/INFO]: Preparing spawn area: 69%
+[16:22:58] [Server thread/INFO]: Preparing spawn area: 74%
+[16:22:59] [Server thread/INFO]: Preparing spawn area: 79%
+[16:23:00] [Server thread/INFO]: Preparing spawn area: 84%
+[16:23:01] [Server thread/INFO]: Preparing spawn area: 89%
+[16:23:02] [Server thread/INFO]: Preparing spawn area: 94%
+[16:23:03] [Server thread/INFO]: Preparing spawn area: 99%
+[16:23:04] [Server thread/INFO]: Changing view distance to 4, from 10
+[16:23:05] [Netty Local Client IO #0/INFO]: [STDOUT]: Transformed Name: net.minecraft.client.entity.EntityOtherPlayerMP
+[16:23:05] [Netty Local Client IO #0/INFO]: [STDOUT]: MALMO: Attempting to transform MinecraftServer
+[16:23:05] [Netty Local Client IO #0/INFO]: [STDOUT]: MALMO: Found EntityOtherPlayerMP, attempting to transform it
+[16:23:05] [Server thread/INFO]: [STDOUT]: SERVER request state: WAITING_FOR_MOD_READY
+[16:23:05] [Server thread/INFO]: [STDOUT]: CLIENT request state: WAITING_FOR_SERVER_READY
+[16:23:06] [Client thread/INFO]: [STDOUT]: CLIENT enter state: WAITING_FOR_SERVER_READY
+[16:23:06] [Server thread/INFO]: [STDOUT]: SERVER enter state: WAITING_FOR_MOD_READY
+[16:23:06] [Netty Local Client IO #0/INFO]: Server protocol version 2
+[16:23:06] [Netty Server IO #1/INFO]: Client protocol version 2
+[16:23:06] [Netty Server IO #1/INFO]: Client attempting to join with 5 mods : minecraft@1.11.2,FML@8.0.99.99,malmomod@0.37.0,forge@13.20.0.2228,mcp@9.19
+[16:23:06] [Netty Local Client IO #0/INFO]: [Netty Local Client IO #0] Client side modded connection established
+[16:23:07] [Server thread/INFO]: [Server thread] Server side modded connection established
+[16:23:07] [Server thread/INFO]: MineRLAgent[local:E:460ad665] logged in with entity id 899 at (-39.5, 65.0, 238.5)
+[16:23:07] [Server thread/INFO]: MineRLAgent joined the game
+[16:23:07] [Server thread/INFO]: [STDOUT]: SERVER request state: DORMANT
+[16:23:07] [Server thread/INFO]: [STDOUT]: SERVER enter state: DORMANT
+[16:23:07] [Server thread/INFO]: [STDOUT]: INCOMING MISSION: Received MissionInit directly through ServerStateMachine constructor.
+[16:23:07] [Server thread/INFO]: [STDOUT]: Mission received: Navigation through survival world.
+[16:23:07] [Server thread/INFO]: Received mission: ?9Navigation through survival world.
+[16:23:07] [Server thread/INFO]: Source: ?alocalhost
+[16:23:07] [Server thread/INFO]: [STDOUT]: SERVER request state: BUILDING_WORLD
+[16:23:07] [Server thread/INFO]: [STDOUT]: SERVER enter state: BUILDING_WORLD
+[16:23:07] [Server thread/INFO]: [STDOUT]: SERVER request state: WAITING_FOR_AGENTS_TO_ASSEMBLE
+[16:23:10] [Server thread/INFO]: [STDOUT]: SERVER enter state: WAITING_FOR_AGENTS_TO_ASSEMBLE
+[16:23:10] [Server thread/INFO]: [STDOUT]: Experiment requires: 
+[16:23:10] [Server thread/INFO]: [STDOUT]: >>>> MineRLAgent
+[16:23:11] [Server thread/WARN]: Can't keep up! Did the system time change, or is the server overloaded? Running 6861ms behind, skipping 137 tick(s)
+[16:23:12] [Client thread/INFO]: [CHAT] Received mission: ?9Navigation through survival world.
+[16:23:12] [Client thread/INFO]: [CHAT] Source: ?alocalhost
+[16:23:12] [Client thread/INFO]: [STDOUT]: ***Telling server we are ready - MineRLAgent
+[16:23:12] [Client thread/INFO]: [STDOUT]: ***Telling server we are ready - MineRLAgent
+[16:23:13] [Client thread/INFO]: [STDOUT]: CLIENT request state: RUNNING
+[16:23:13] [Client thread/INFO]: [STDOUT]: CLIENT enter state: RUNNING
+[16:23:13] [Server thread/INFO]: [STDOUT]: SERVER request state: RUNNING
+[16:23:13] [Client thread/INFO]: [STDOUT]: Resized the window
+[16:23:13] [Client thread/INFO]: [STDOUT]: Unpausing
+[16:23:13] [Server thread/INFO]: [STDOUT]: SERVER enter state: RUNNING
+[16:23:14] [Client thread/INFO]: [CHAT] ?l300...
+[16:23:14] [Server thread/INFO]: [STDOUT]: Warning: managed 10/20 ticks this second.
+[16:23:17] [Server thread/INFO]: [STDOUT]: Warning: managed 3/20 ticks this second.
+[16:23:17] [Client thread/INFO]: [CHAT] ?l299...
+[16:23:18] [Server thread/INFO]: [STDOUT]: Warning: managed 12/20 ticks this second.
+[16:23:19] [Server thread/INFO]: [STDOUT]: Warning: managed 11/20 ticks this second.
+[16:23:19] [Client thread/INFO]: [CHAT] ?l298...
+[16:23:20] [Server thread/INFO]: [STDOUT]: Warning: managed 13/20 ticks this second.
+[16:23:21] [Client thread/INFO]: [CHAT] ?l297...
+[16:23:21] [Server thread/INFO]: [STDOUT]: Warning: managed 12/20 ticks this second.
+[16:23:22] [Server thread/INFO]: [STDOUT]: Warning: managed 14/20 ticks this second.
+[16:23:22] [Client thread/INFO]: [CHAT] ?l296...
+[16:23:23] [Server thread/INFO]: [STDOUT]: Warning: managed 13/20 ticks this second.
+[16:23:24] [Client thread/INFO]: [CHAT] ?l295...
+[16:23:24] [Server thread/INFO]: [STDOUT]: Warning: managed 13/20 ticks this second.
+[16:23:25] [Server thread/INFO]: [STDOUT]: Warning: managed 14/20 ticks this second.
+[16:23:25] [Client thread/INFO]: [CHAT] ?l294...
+[16:23:26] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:23:27] [Client thread/INFO]: [CHAT] ?l293...
+[16:23:27] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:28] [Client thread/INFO]: [CHAT] ?l292...
+[16:23:28] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:29] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:23:29] [Client thread/INFO]: [CHAT] ?l291...
+[16:23:30] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:23:30] [Client thread/INFO]: [CHAT] ?l290...
+[16:23:31] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:32] [Client thread/INFO]: [CHAT] ?l289...
+[16:23:32] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:33] [Client thread/INFO]: [CHAT] ?l288...
+[16:23:33] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:34] [Client thread/INFO]: [CHAT] ?l287...
+[16:23:34] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:35] [Client thread/INFO]: [CHAT] ?l286...
+[16:23:35] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:23:36] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:36] [Client thread/INFO]: [CHAT] ?l285...
+[16:23:37] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:38] [Client thread/INFO]: [CHAT] ?l284...
+[16:23:38] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:23:39] [Client thread/INFO]: [CHAT] ?l283...
+[16:23:39] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:40] [Client thread/INFO]: [CHAT] ?l282...
+[16:23:40] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:41] [Client thread/INFO]: [CHAT] ?l281...
+[16:23:41] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:42] [Client thread/INFO]: [CHAT] ?l280...
+[16:23:42] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:43] [Server thread/INFO]: [STDOUT]: Warning: managed 14/20 ticks this second.
+[16:23:44] [Client thread/INFO]: [CHAT] ?l279...
+[16:23:44] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:23:45] [Client thread/INFO]: [CHAT] ?l278...
+[16:23:46] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:46] [Client thread/INFO]: [CHAT] ?l277...
+[16:23:47] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:47] [Client thread/INFO]: [CHAT] ?l276...
+[16:23:48] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:23:49] [Client thread/INFO]: [CHAT] ?l275...
+[16:23:49] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:50] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:50] [Client thread/INFO]: [CHAT] ?l274...
+[16:23:51] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:51] [Client thread/INFO]: [CHAT] ?l273...
+[16:23:52] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:52] [Client thread/INFO]: [CHAT] ?l272...
+[16:23:53] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:53] [Client thread/INFO]: [CHAT] ?l271...
+[16:23:54] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:23:54] [Client thread/INFO]: [CHAT] ?l270...
+[16:23:55] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:23:55] [Client thread/INFO]: [CHAT] ?l269...
+[16:23:56] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:57] [Client thread/INFO]: [CHAT] ?l268...
+[16:23:57] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:58] [Client thread/INFO]: [CHAT] ?l267...
+[16:23:58] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:23:59] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:23:59] [Client thread/INFO]: [CHAT] ?l266...
+[16:24:00] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:24:00] [Client thread/INFO]: [CHAT] ?l265...
+[16:24:01] [Client thread/INFO]: [CHAT] ?l264...
+[16:24:02] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:24:03] [Client thread/INFO]: [CHAT] ?l263...
+[16:24:03] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:24:04] [Client thread/INFO]: [CHAT] ?l262...
+[16:24:05] [Client thread/INFO]: [CHAT] ?l261...
+[16:24:05] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:24:06] [Client thread/INFO]: [CHAT] ?l260...
+[16:24:06] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:24:07] [Client thread/INFO]: [CHAT] ?l259...
+[16:24:07] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:24:08] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:08] [Client thread/INFO]: [CHAT] ?l258...
+[16:24:09] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:24:10] [Client thread/INFO]: [CHAT] ?l257...
+[16:24:11] [Server thread/INFO]: [STDOUT]: Warning: managed 8/20 ticks this second.
+[16:24:12] [Server thread/INFO]: [STDOUT]: Warning: managed 12/20 ticks this second.
+[16:24:12] [Client thread/INFO]: [CHAT] ?l256...
+[16:24:13] [Server thread/INFO]: [STDOUT]: Warning: managed 18/20 ticks this second.
+[16:24:13] [Client thread/INFO]: [CHAT] ?l255...
+[16:24:14] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:14] [Client thread/INFO]: [CHAT] ?l254...
+[16:24:15] [Client thread/INFO]: [CHAT] ?l253...
+[16:24:16] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:17] [Client thread/INFO]: [CHAT] ?l252...
+[16:24:17] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:24:18] [Client thread/INFO]: [CHAT] ?l251...
+[16:24:18] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:24:19] [Server thread/INFO]: [STDOUT]: Warning: managed 15/20 ticks this second.
+[16:24:19] [Client thread/INFO]: [CHAT] ?l250...
+[16:24:20] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:24:20] [Client thread/INFO]: [CHAT] ?l249...
+[16:24:21] [Client thread/INFO]: [CHAT] ?l248...
+[16:24:22] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:22] [Client thread/INFO]: [CHAT] ?l247...
+[16:24:23] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:24:23] [Client thread/INFO]: [CHAT] ?l246...
+[16:24:24] [Client thread/INFO]: [CHAT] ?l245...
+[16:24:25] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:26] [Client thread/INFO]: [CHAT] ?l244...
+[16:24:27] [Client thread/INFO]: [CHAT] ?l243...
+[16:24:28] [Client thread/INFO]: [CHAT] ?l242...
+[16:24:28] [Server thread/INFO]: [STDOUT]: Warning: managed 16/20 ticks this second.
+[16:24:29] [Client thread/INFO]: [CHAT] ?l241...
+[16:24:30] [Client thread/INFO]: [CHAT] ?l240...
+[16:24:31] [Client thread/INFO]: [CHAT] ?l239...
+[16:24:31] [Server thread/INFO]: [STDOUT]: Warning: managed 17/20 ticks this second.
+[16:24:32] [Client thread/INFO]: [CHAT] ?l238...
+[16:24:32] [Server thread/INFO]: [STDOUT]: Warning: managed 19/20 ticks this second.
+[16:24:33] [Client thread/INFO]: [CHAT] ?l237...
