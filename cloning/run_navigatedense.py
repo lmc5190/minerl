@@ -75,7 +75,7 @@ while not done:
         action['sprint'] = 1 if output[0][6].item() >= threshold else 0
         action['place'] = 1 if output[0][7].item() >= threshold else 0
         action['camera'] = [normalize_tensor(output[0][8],0,1.0,-180.0,180.0).item(),\
-                         normalize_tensor(output[0][9],0,1.0,-360.0,360.0).item()]
+                            normalize_tensor(output[0][9],0,1.0,-360.0,360.0).item()]
 
     obs, reward, done, info = env.step(action)
     env.render()

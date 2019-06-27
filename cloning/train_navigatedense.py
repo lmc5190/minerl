@@ -48,10 +48,13 @@ data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 num_epochs=2
 batch_size=32
 
-#create network, put on gpu
+#create network, put on gpu. Use multiple gpus if you see them.
 net = Net()
+
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print(device)
+if torch.cuda.device_count() > 1:
+  print("Let's use", torch.cuda.device_count(), "GPUs!")
+  net = nn.DataParallel(net)
 net.to(device, dtype=torch.double)
 
 
@@ -114,7 +117,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     i=i+1
 
 #COMMAND TO SAVE MODEL
-#torch.save(net, 'net_navigatedense.pt')
 torch.save(net, 'net_navigatedense2_withcompass.pt')
 
 #exec(open('navigatedense.py').read())
