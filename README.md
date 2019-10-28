@@ -25,7 +25,7 @@ Example docker container run
 
 - NV_GPU=0 isolates GPU 0. To isolate two GPUS, you could use NV_GPU=1,2 for example.
 - restricted to 6 cpus and 112GB of memory
-- port 800 on the docker container will talk to port 4000 on the server.
+- port 5920 on the docker container will talk to port 5920 on the server.
 - I 'bind' a mounted drive on the server to a drive on the docker container. This is needed so I can SSH into the server with my windows VDI and develop in VS Code!
 - It is important to note that use of the `--rm` flag will destroy the container upon exit. Any state that one would like persisted after the container exits should accommodate accordingly. 
 - The image will be pulled from dockerhub in the landonchambers/minerl repository. Dockerfile [here](https://github.com/lmc5190/minerl/blob/master/Dockerfile)
