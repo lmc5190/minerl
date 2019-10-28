@@ -60,13 +60,13 @@ def zhang_loss(output,target, lambda_L1, lambda_L2, lambda_classify,class_idx_st
 data = minerl.data.make("MineRLNavigateDense-v0", num_workers = 4)
 
 #set pipeline parameters
-num_epochs=10
+num_epochs=4
 batch_size=32
 
 #Set loss hyperparameters
-lambda_L1=1.0
-lambda_L2=0.01
-lambda_classify=0.005
+lambda_L1=0.25 # change from 1.0
+lambda_L2=0.25 # change from 0.01
+lambda_classify=0.5 # change from 0.005
 
 #create network, put on gpu. Use multiple gpus if you see them.
 net = Net()
@@ -139,6 +139,6 @@ for obs, rew, done, act in data.seq_iter(num_epochs=num_epochs, max_sequence_len
     i=i+1
 
 #COMMAND TO SAVE MODEL
-torch.save(net, 'models/net_navigatedense6_zhang.pt')
+torch.save(net, 'models/net_navigatedense4_zhang.pt')
 
 #exec(open('navigatedense.py').read())

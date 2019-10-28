@@ -41,14 +41,14 @@ def normalize_tensor(x,xmin,xmax,a,b):
 #load model (called net)
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print(device)
-net = torch.load('models/net_navigatedense6_zhang.pt', map_location=device)
+net = torch.load('models/net_navigatedense4_zhang.pt', map_location=device)
 
 #decision threshold
 threshold=0.5
 
 #make environment
 env = gym.make('MineRLNavigateDense-v0')
-obs, _ = env.reset()
+obs = env.reset()
 
 done = False
 net_reward = 0
